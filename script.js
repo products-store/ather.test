@@ -566,4 +566,31 @@ if (originalSwitchModel) {
 // تحديث window.currentModel عند تغيير اللون
 function updateCurrentModel() {
     window.currentModel = currentModel;
+
 }
+
+
+
+
+
+// --- تحديث الموديل الحالي عند تغيير اللون ---
+document.addEventListener('DOMContentLoaded', () => {
+    // تحديث window.currentModel عند تغيير اللون
+    document.querySelector('.colors').addEventListener('click', (event) => {
+        if (event.target.classList.contains('color-btn')) {
+            // تحديث الموديل الحالي في النطاق العام
+            window.currentModel = currentModel;
+            
+            // إرسال حدث تحديث الموديل
+            const modelChangedEvent = new CustomEvent('modelChanged', {
+                detail: { model: currentModel }
+            });
+            document.dispatchEvent(modelChangedEvent);
+        }
+    });
+});
+
+// تحديث window.currentModel عند تحميل الصفحة
+window.addEventListener('load', () => {
+    window.currentModel = currentModel;
+});
