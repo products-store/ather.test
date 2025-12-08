@@ -122,33 +122,29 @@ function trackTikTokPurchase(order) {
     // --- Functions ---
 
     // الحصول على سعر المنتج الحالي بناءً على الموديل
-    const getCurrentProductPrice = () => {
-        // استخدام نفس بيانات الموديل من script.js
-        const modelData = {
-            model1: { price: 4800 },
-            model2: { price: 5200 }
-        };
-        
-        // محاولة الحصول على الموديل الحالي من script.js
-        if (typeof window.currentModel !== 'undefined') {
-            currentModel = window.currentModel;
-        } else {
-            // إذا لم يكن متوفراً، نستخدم الزر النشط لتحديد الموديل
-            const activeModelBtn = document.querySelector('.model-btn.active');
-            currentModel = activeModelBtn ? activeModelBtn.dataset.model : 'model1';
-        }
-        
-        return modelData[currentModel]?.price || 4800;
+// الحصول على سعر المنتج الحالي بناءً على الموديل
+const getCurrentProductPrice = () => {
+    // استخدام نفس بيانات الموديل من script.js
+    const modelData = {
+        model1: { price: 4800 },
+        model2: { price: 4800 } // قمت بتصحيح السعر
     };
+    
+    // استخدام window.currentModel مباشرة
+    const currentModel = window.currentModel || 'model1';
+    
+    return modelData[currentModel]?.price || 4800;
+};
 
-    // الحصول على اسم المنتج الحالي
-    const getCurrentProductName = () => {
-        const modelData = {
-            model1: { name: "قميص رجالي أنيق" },
-            model2: { name: "قميص رجالي كلاسيك" }
-        };
-        return modelData[currentModel]?.name || "قميص رجالي";
+// الحصول على اسم المنتج الحالي
+const getCurrentProductName = () => {
+    const modelData = {
+        model1: { name: "قميص شتوي رجالي" },
+        model2: { name: "قميص شتوي كلاسيك" }
     };
+    const currentModel = window.currentModel || 'model1';
+    return modelData[currentModel]?.name || "قميص رجالي";
+};
 
     // Populate Wilaya dropdown
     const populateWilayas = () => {
@@ -216,13 +212,14 @@ const sendToDiscordWebhook = async (order) => {
     ).join('\n');
 
     // دالة مساعدة للحصول على اسم الموديل
-    function getModelName(modelKey) {
-        const modelNames = {
-            'model1': ' 1',
-            'model2': ' 2'
-        };
-        return modelNames[modelKey] || modelKey;
-    }
+// دالة مساعدة للحصول على اسم الموديل
+function getModelName(modelKey) {
+    const modelNames = {
+        'model1': 'موديل 1',
+        'model2': 'موديل 2'
+    };
+    return modelNames[modelKey] || modelKey;
+}
 
     const deliveryMethodText = order.shippingInfo.deliveryMethod === 'home' 
         ? `التوصيل إلى المنزل (${order.shippingInfo.commune})`
@@ -500,4 +497,5 @@ if (typeof trackTikTokPurchase !== 'undefined') {
         saveInfoOnInput();
     }));
     quickCommuneInput.addEventListener('input', saveInfoOnInput);
+
 });
